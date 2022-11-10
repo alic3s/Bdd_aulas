@@ -1,0 +1,93 @@
+-- create database academico;
+
+-- Criando a tabela curso
+create table Curso(
+	codigoCurso integer not null primary key,
+    nomeCurso varchar(40)
+);
+
+-- Selecionando os dados da tabela Curso
+select * from Curso;
+
+-- Inserindo dados na tabela de Curso
+
+insert into Curso 
+values(4, 'Ingles', 4000);
+
+insert into Curso 
+values(1, 'Quimica', 3000);
+
+insert into Curso (codigoCurso, nomeCurso)
+values(2, 'Fisica');
+
+insert into Curso (codigoCurso, nomeCurso)
+values('Matematica', 3);
+
+-- Tentando inserir uma linha com código nulo
+insert into Curso (nomeCurso, codigoCurso)
+values('Portugues');
+
+-- Alterar a estrutura da tabela Curso
+-- Adicionando uma coluna
+alter table Curso
+	add column cargaHoraria integer;
+    
+select * from Curso;
+
+-- Update
+
+update curso
+set cargaHoraria = 3000
+where codigoCurso = 1;
+
+update curso 
+set cargaHoraria = 2500
+where codigoCurso = 2;
+
+update curso
+set cargaHoraria = 4000
+where codigocurso = 3;
+
+-- Excluindo uma linha na tabela Curso
+-- o comando delete
+
+-- delete from Curso
+-- where codigoCurso = 1;
+
+select * from Curso;
+
+-- Criando a tabela aluno
+create table Aluno(
+matricula integer not null primary key,
+nomeAluno varchar(30),
+codigoCurso integer,
+CONSTRAINT fk_curso FOREIGN KEY (codigoCurso)
+REFERENCES curso (codigoCurso)
+);
+
+insert into Aluno (matricula, nomeAluno, codigoCurso)
+values(1, 'Huguinho', 1);
+
+insert into Aluno (matricula, nomeAluno, codigoCurso)
+values(2, 'Zezinho', 2);
+
+insert into Aluno (matricula, nomeAluno, codigoCurso)
+values(3, 'Luizinho', 3);
+
+insert into Aluno (matricula, nomeAluno, codigoCurso)
+values(4, 'José', 4);
+
+insert into Aluno (matricula, nomeAluno, codigoCurso)
+values(5, 'Maria', 1);
+
+insert into Aluno (matricula, nomeAluno, codigoCurso)
+values(6, 'João', 2);
+
+insert into Aluno (matricula, nomeAluno, codigoCurso)
+values(7, 'Ana', 4);
+
+select * from Aluno
+
+-- select matricula, nomeAluno
+-- from Aluno;
+-- apagando a tabela curso
