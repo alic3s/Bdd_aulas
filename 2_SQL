@@ -1,0 +1,41 @@
+create database petshop;
+use petshop;
+
+create table Produto(
+	codProduto integer not null primary key,
+    nomeProduto varchar(40),
+    quantEstoque integer,
+    valorUnitario float,
+    validProduto date
+);
+
+create table Fornecedor(
+	codFornecedor integer not null primary key,
+    nomeFornecedor varchar(40),
+    telFornecedor char(11)
+);
+
+create table Funcionario(
+	codFuncionario integer not null primary key,
+    nomeFuncionario varchar(40)
+);
+
+create table Cliente(
+	codCliente integer not null primary key,
+    nomeCliente varchar(40),
+    telCliente char(11)
+);
+
+create table Animal(
+	codCliente integer not null,
+    constraint fk_cliente foreign key (codCliente)
+    references cliente(codCliente),
+	racaAnimal varchar(40)
+);
+
+create table Serviço(
+	codServiço integer not null primary key,
+    nomeServiço varchar(40),
+    entrada date,
+    saida date
+);
