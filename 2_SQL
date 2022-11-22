@@ -27,7 +27,7 @@ create table Cliente(
 );
 
 create table Animal(
-	codCliente integer not null,
+	codCliente integer,
     constraint fk_cliente foreign key (codCliente)
     references cliente(codCliente),
 	racaAnimal varchar(40)
@@ -39,3 +39,39 @@ create table Serviço(
     entrada date,
     saida date
 );
+
+create table Vendas(
+	codProduto integer,
+    constraint fk_produto foreign key (codProduto)
+    references produto(codProduto),
+    codFuncionario integer,
+    constraint fk_funcionario foreign key (codFuncionario)
+    references funcionario(codFuncionario)
+);
+
+create table Realizado(
+	codFuncionario integer,
+    constraint fk_funcionario foreign key (codFuncionario)
+    references funcionario(codFuncionario),
+    codServiço integer,
+    constraint fk_serviço foreign key (codServiço)
+    references funcionario(codServiço)
+);
+
+create table Fornecimento(
+	codProduto integer,
+    constraint fk_produto foreign key (codProduto)
+    references produto(codProduto),
+	codFornecedor integer,
+    constraint fk_fornecedor foreign key (codFornecedor)
+    references produto(codFornecedor)
+);
+
+select * from serviço;
+select * from animal;
+select * from funcionario;
+select * from fornecedor;
+select * from cliente;
+select * from produto;
+select * from vendas;
+select * from serviçorealizado
