@@ -42,28 +42,28 @@ create table Serviço(
 
 create table Vendas(
 	codProduto integer,
-    constraint fk_produto foreign key (codProduto)
+    constraint fk_produtov foreign key (codProduto)
     references produto(codProduto),
     codFuncionario integer,
-    constraint fk_funcionario foreign key (codFuncionario)
+    constraint fk_funcionariov foreign key (codFuncionario)
     references funcionario(codFuncionario)
 );
 
 create table Realizado(
 	codFuncionario integer,
-    constraint fk_funcionario foreign key (codFuncionario)
+    constraint fk_funcionariore foreign key (codFuncionario)
     references funcionario(codFuncionario),
     codServiço integer,
-    constraint fk_serviço foreign key (codServiço)
+    constraint fk_serviçore foreign key (codServiço)
     references funcionario(codServiço)
 );
 
 create table Fornecimento(
 	codProduto integer,
-    constraint fk_produto foreign key (codProduto)
+    constraint fk_produtofo foreign key (codProduto)
     references produto(codProduto),
 	codFornecedor integer,
-    constraint fk_fornecedor foreign key (codFornecedor)
+    constraint fk_fornecedorfo foreign key (codFornecedor)
     references produto(codFornecedor)
 );
 
