@@ -1,0 +1,59 @@
+create database agenciaViagem;
+use agenciaViagem;
+
+create table Aeroporto(
+	codAero integer not null primary key,
+    tipoAero char(1),
+    aterrissagem varchar(40),
+    decolagem varchar(40),
+    cidadeAero varchar(40),
+    paísAero varchar(40),
+    continenteAero char(1)
+);
+
+insert into Aeroporto
+values(10, 'N', 'Aracaju', 'São Paulo', 'Guarulhos', 'Brasil', 'S');
+
+select * from Aeroporto;
+
+create table Companhia(
+	codComp integer not null primary key,
+    nomeComp varchar(40),
+    tarifaComp float
+);
+
+insert into Companhia
+values(25, 'Latam', 54.50);
+
+select * from Companhia;
+
+-- tipo 1 = 100 passageiros
+-- tipo 2 = 150 passageiros
+-- tipo 3 = 200 passageiros
+create table Aviao(
+	codAviao integer not null primary key,
+    tipoAviao char(1)
+);
+
+insert into Aviao
+values(009, 2);
+
+select * from Aviao;
+
+create table Voo(
+	codComp integer,
+    constraint fk_comp foreign key (codComp)
+    references companhia(codComp),
+    codAviao integer,
+    constraint fk_aviao foreign key (codAviao)
+    references aviao(codAviao),
+    codAero integer,
+    constraint fk_aero foreign key (codAero)
+    references aeroporto(codAero),
+    diaVoo char(3)
+);
+
+insert into Voo
+values(25, 009, 10, 'DOM');
+
+select * from Voo
