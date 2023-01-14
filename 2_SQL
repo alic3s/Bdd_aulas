@@ -75,3 +75,17 @@ select * from cliente;
 select * from produto;
 select * from vendas;
 select * from serviçorealizado
+
+insert into Fornecimento
+values(1, 31);
+insert into Fornecimento
+values(2, 11);
+insert into Fornecimento
+values(3, 21);
+
+
+select racaAnimal
+from Animal
+order by racaAnimal asc;
+
+select * from Animal
