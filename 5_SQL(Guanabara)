@@ -1,0 +1,65 @@
+create database cadastro
+default character set utf8
+default collate utf8_general_ci;
+
+create table pessoas(
+	id int not null auto_increment,
+	nome varchar(30) not null,
+    nascimento date,
+    sexo enum('M', 'F'),
+    peso decimal(5,2),
+    altura decimal(3,2),
+    nacionalidade varchar(20) default 'Brasil',
+    primary key(id)
+)default charset = utf8;
+
+insert into pessoas values
+(default, 'Claudio', '1997-4-12', 'M', '89.4', '1.98', default),
+(default, 'Pedro', '2000-9-23', 'M', '78', '1.80', 'Alemanha'),
+(default, 'Suzana', '2006-6-6', 'F', '60.1', '1.64', 'EUA');
+
+select * from pessoas
+order by nome desc;
+
+select sexo, nome, peso from pessoas
+order by peso;
+
+alter table pessoas
+add column profissao varchar(10) after nome;
+
+/* alter table pessoas
+modify column profissao varchar(20) not null default ""; */
+
+alter table pessoas
+add codigo int first;
+
+desc pessoas;
+
+-- modify para modificar coluna; change para modificar coluna e rename para modificar a tabela inteira
+
+use cadastro;
+create table if not exists curso(
+	nome varchar(30) not null unique,
+    descricao text,
+    carga int unsigned,
+    totaulas int unsigned,
+    ano year default '2023'
+) default charset utf8;
+
+alter table curso
+add column idcurso int first;
+desc curso;
+
+alter table curso
+add primary key(idcurso);
+
+insert into curso values
+('1', 'HTML4', 'Curso de HTML5', '40', '37', '2014'),
+('2', 'Algoritmos', 'Lógica de Programação', '20', '15', '2014'),
+('3', 'Photoshop', 'Dicas de Photoshop CC', '10', '8', '2014');
+
+select * from curso;
+
+update curso
+set nome = 'HTML5'
+where idcurso = '1';
