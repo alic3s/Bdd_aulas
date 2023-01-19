@@ -1,47 +1,135 @@
 create database oficina;
+use oficina;
 
 create table Cliente(
-	codCliente integer primary key,
-	nomeCliente varchar(40)
+	codCliente int primary key auto_increment,
+	nomeCliente varchar(40) not null,
+    telefone char(11) not null,
+    sexo enum('M', 'F')
 );
 
 create table Marca(
-	codMarca integer primary key,
-    nomeMarca varchar(20)
+	codMarca int primary key auto_increment, -- auto_increment = 100?
+    nomeMarca varchar(20) not null
 );
 
-create table Veiculo(
-	codVeiculo integer primary key,
-    modelo varchar(30),
-    placa char(7),
+create table if not exists Veiculo(
+	codVeiculo int primary key not null,
+    modelo varchar(20) not null,
+    placa varchar(8) not null unique,
     codCliente int not null,
     codMarca int not null,
     constraint fk_veiculo_cliente foreign key(codCliente) references Cliente(codCliente),
-    constraint fk_marca_cliente foreign key(codMArca) references Marca(codMarca)
+    constraint fk_veiculo_marca foreign key(codMArca) references Marca(codMarca)
 );
 
 create table Peça(
-	codPeça integer primary key,
-    descrição varchar(30),
-    valor float,
-    qtde int
+	codPeça int primary key auto_increment,
+    descrição text not null,
+    valor float not null,
+    qtde int not null
 );
 
 create table Serviço(
-	codserviço integer primary key
+	codServiço integer primary key auto_increment,
+    tipoServiço varchar(50) not null
 );
 
 create table Mecanico(
-	codMecanico integer primary key,
-    nomeMecanico varchar(20)
+	codMecanico int primary key auto_increment,
+    nomeMecanico varchar(30),
+    telefone char(11) not null
 );
 
-create table Relação1(
-	 ordeServiço varchar(20),
-     codVeiculo int not null,
-     codServiço int not null,
-     dataExecução date,
-     natuServiço varchar(20)
-)
+create table if not exists Execucao(
+	codExecucao int primary key auto_increment,
+    dataEntrada date,
+    dataSaida date,
+	codVeiculo int not null,
+	codServiço int not null,
+    
+    constraint fk_execucao_veiculo foreign key(codVeiculo) references Veiculo(codVeiculo),
+    constraint fk_execucao_serviço foreign key(codServiço) references Serviço(codServiço)
+);
 
-alter table Relação1 
+create table PecaUtilizada(
+	codPeça int,
+    codVeiculo int,
+    codServiço int
+    
+    constraint fk_peca_utilizada foreign key .......
+);
+
+(o primeiro é o meu)
+
+###### 
+create database if not exists bd_Oficina;
+use bd_oficina;
+
+create table if not exists Cliente(
+id_cliente int primary key auto_increment,
+nome_cliente varchar(50) not null,
+telefone char(11) not null,
+#sexo enum('M', 'F') not null,
+sexo char(1) check(sexo in ('M','F')) not null);
+
+create table if not exists Peca(
+id_peca int primary key auto_increment,
+modelo varchar(20) not null,
+valor float not null,
+descricao text null);
+
+create table if not exists Marca(
+id_marca int primary key auto_increment,
+nome_marca varchar(15) not null);
+
+create table if not exists Servico(
+id_servico int primary key auto_increment,
+tipo_servico varchar(40) not null);
+
+create table if not exists Mecanico(
+id_mecanico int primary key auto_increment,
+nome_mecanico varchar(50),
+telefone char(11) not null,
+cargo varchar(30));
+
+create table if not exists Veiculo(
+id_veiculo int primary key auto_increment,
+modelo varchar(20) not null,
+placa varchar(8) not null unique,
+
+id_cliente int not null,
+id_marca int not null,
+
+constraint fk_veiculo_cliente foreign key (id_cliente) references Cliente(id_cliente),
+constraint fk_veiculo_marca foreign key (id_marca) references Marca(id_marca));
+
+create table if not exists Execucao(
+id_execucao int primary key auto_increment,
+data_entrada date not null,
+data_saida date,
+id_veiculo int not null,
+id_servico int not null,
+
+constraint fk_execucao_veiculo foreign key (id_veiculo) references Veiculo(id_veiculo),
+constraint fk_execucao_servico foreign key (id_servico) references Servico(id_servico));
+
+
+create table if not exists PecaUtilizada(
+id_peca int,
+id_veiculo int,
+id_servico int,
+
+constraint fk_pecaUtilizada_peca foreign key (id_peca) references Peca(id_peca),
+constraint fk_pecaUtilizada_veiculo foreign key (id_veiculo) references Execucao(id_veiculo),
+constraint fk_pecaUtilizada_servico foreign key (id_servico) references Execucao(id_servico));
+
+create table if not exists Responsavel(
+id_mecanico int,
+id_veiculo int,
+id_servico int,
+
+constraint fk_responsavel_mecanico foreign key (id_mecanico) references Mecanico(id_mecanico),
+constraint fk_responsavel_veiculo foreign key (id_veiculo) references execucao(id_veiculo),
+constraint fk_responsavel_servico foreign key (id_servico) references execucao(id_servico));    
+######
