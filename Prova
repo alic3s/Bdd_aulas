@@ -1,105 +1,125 @@
 create database Posto_Saude;
+use Posto_Saude;
 
 create table PostoSaude(
-	cod_posto int primary key not null,
+	cod_posto int primary key not null check (cod_posto > 0),
     nome_posto varchar(30) not null
-    check (cod_posto > 0)
 );
-
-insert into postosaude values (1, 'Gracinha'), (2, 'Santa Maria'), (3, 'Sorriso Maroto'), (4, 'Taboa Curva'), (5, 'Solana');
-
 desc PostoSaude;
+
+insert into postosaude values
+(1, 'Gracinha'), (2, 'Santa Maria'), (3, 'Sorriso Maroto'), (4, 'Taboa Curva'), (5, 'Solana');
+
 select * from PostoSaude;
 
 create table Farmacia(
-	cod_farmacia int primary key not null,
+	cod_farmacia int primary key not null check (cod_farmacia > 0),
     nome_farmacia varchar(30) not null,
-    check (cod_farmacia > 0),
-    cod_posto int not null,
+    
+    cod_posto int not null check (cod_posto > 0),
     constraint fk_farmacia_posto foreign key (cod_posto) references PostoSaude(cod_posto)
 );
-
-insert into farmacia values (10, 'Pague Menos', 1), (20, 'Pague Mais', 2), (30, 'Pague o Mesmo', 3), (40, 'Pague Bem', 4), (50, 'Não Pague', 5);
-
 desc Farmacia;
+
+insert into farmacia values
+(10, 'Pague Menos', 1), (20, 'Pague Mais', 2), (30, 'Pague o Mesmo', 3), (40, 'Pague Bem', 4), (50, 'Não Pague', 5);
+
 select * from Farmacia;
 
 create table Remedio(
-	cod_remedio int primary key not null,
+	cod_remedio int primary key not null check (cod_remedio > 0),
     nome_remedio varchar(30) not null,
     estoque int not null
-	check (cod_remedio > 0)
 );
-
-insert into remedio values (11, 'Lorotadina', 9), (22, 'Deslorotadina', 8), (33, 'Buscofem', 7), (44, 'Tylenol', 6), (55, 'Omeoprazol', 5);
-
 desc Remedio;
+
+insert into remedio values
+(11, 'Lorotadina', 9), (22, 'Deslorotadina', 8), (33, 'Buscofem', 7), (44, 'Tylenol', 6), (55, 'Omeoprazol', 5);
+
 select * from Remedio;
 
 create table FarmaciaRemedio(
-	cod_farmacia int not null,
+	cod_farmacia int not null check (cod_farmacia > 0),
     constraint fk_farmacia_remedioF foreign key (cod_farmacia) references Farmacia(cod_farmacia),
-    cod_remedio int not null,
+    cod_remedio int not null check (cod_remedio > 0),
 	constraint fk_farmacia_remedioR foreign key (cod_remedio) references Remedio(cod_remedio),
-    quantidade int check (quantidade > 0) -- nao é preciso ser 0
+    quantidade int check (quantidade >= 0)
 );
-
-insert into farmaciaremedio values (10, 11, 9), (20, 22, 8), (30, 33, 7), (40, 44, 6), (50, 55, 5);
-
 desc FarmaciaRemedio;
+
+insert into farmaciaremedio values
+(10, 11, 9), (20, 22, 8), (30, 33, 7), (40, 44, 6), (50, 55, 5);
+
 select * from FarmaciaRemedio;
 
 create table Receita(
-	cod_receita int primary key not null check (cod_receita > 0)
+	cod_receita int primary key not null check (cod_receita > 0),
+    descricao text,
+    data_prescricao date not null
 );
-
-alter table Receita
-add column data_prescricao date not null;
-
-insert into receita values (111, '2023-01-19'), (222, '2023-01-19'), (333, '2023-01-19'), (444, '2023-01-19'), (555, '2023-01-19');
-
 desc Receita;
+
+insert into receita values
+(111, 'Prescrição Médica', '2023-01-19'), 
+(222, 'Prescrição Médica', '2023-01-20'), 
+(333, 'Prescrição Médica','2023-01-21'), 
+(444, 'Prescrição Médica', '2023-01-22'), 
+(555, 'Prescrição Médica', '2023-01-23');
+
 select * from Receita;
 
 create table Paciente(
 	cod_paciente int primary key not null check (cod_paciente > 0),
     nome_paciente varchar(40)
 );
-
-insert into paciente values (110, 'Ivy'), (120, 'Julian'), (130, 'Lucy'), (140, 'Phoebe'), (150, 'Lili');
-
 desc Paciente;
+
+insert into paciente values
+(110, 'Ivy'), (120, 'Julian'), (130, 'Lucy'), (140, 'Phoebe'), (150, 'Lili');
+
 select * from Paciente;
 
 create table Medicacao(
-	cod_remedio int not null,
-	constraint fk_medicacao_remedio foreign key (cod_remedio) references Remedio(cod_remedio),
-    cod_receita int not null,
-    constraint fk_medicacao_receita foreign key (cod_receita) references Receita(cod_receita),
-    cod_paciente int not null,
-    constraint fk_medicacao_paciente foreign key (cod_paciente) references Receita(cod_paciente),
+	cod_remedio int not null check (cod_remedio > 0),
+	foreign key (cod_remedio) references Remedio(cod_remedio),
+    
+    cod_receita int not null check (cod_receita > 0),
+    foreign key (cod_receita) references Receita(cod_receita),
+    
+    cod_paciente int not null check (cod_paciente > 0),
+    constraint fk_medicacao_paciente foreign key (cod_paciente) references Paciente(cod_paciente),
+    
     quantidade int,
-    status varchar(15) check(status = 'solicitada' or 'aguardando' or 'atendida'),
+    status enum('solicitada', 'aguardando', 'atendida'),
     data_medicacao date not null
-    -- data de vencimento
 );
+desc Medicacao;
+
+
+
+insert into medicacao values 
+(11, 111, 110, 2, 'solicitada', '2023-01-20'),
+(22, 222, 120, 1, 'atendida', '2023-01-21'),
+(33, 333, 130, 3, 'solicitada', '2023-01-22'),
+(44, 444, 140, 2, 'aguardando', '2023-01-23'),
+(55, 555, 150, 4, 'solicitada', '2023-01-24');
+
+select * from Medicacao;
 
 alter table medicacao
 add column data_vencimento date not null;
 
-alter table Medicacao
-add column status varchar(15) check(status = 'solicitada' or 'aguardando' or 'atendida');
+update medicacao 
+set data_vencimento = '2023-11-09' where cod_receita = 111;
 
-insert into medicacao value (10, 111, 110, 2, '2023-01-20', 'solicitada');
-insert into medicacao value (20, 222, 120, 1, '2023-01-21', 'atendida');
-insert into medicacao value(30, 333, 130, 3, '2023-01-21', 'solicitada');
-insert into medicacao value(40, 444, 140, 2, '2023-01-20', 'aguardando');
-insert into medicacao value(50, 555, 150, 4, '2023-01-21', 'solicitada');
+update medicacao 
+set data_vencimento = '2024-01-23' where cod_receita = 222;
 
-update medicacao
-set data_vencimento = ('2023-02-20') where cod_remedio = 10;
+update medicacao 
+set data_vencimento = '2024-03-03' where cod_receita = 333;
 
--- perguntar como funciona o check
+update medicacao 
+set data_vencimento = '2023-12-31' where cod_receita = 444;
 
-desc Medicacao;
-select * from Medicacao;
+update medicacao 
+set data_vencimento = '2024-10-08' where cod_receita = 555;
