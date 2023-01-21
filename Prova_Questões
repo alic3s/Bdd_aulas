@@ -154,4 +154,14 @@ order by nome_remedio;
 
 
 
--- Questão 7 ????
+-- Questão 7
+
+#select max(quantidade) from medicacao;
+
+/*select remedio.nome_remedio, Medicacao.quantidade 
+from Remedio 
+inner join Medicacao on remedio.cod_remedio = Medicacao.cod_remedio; */
+
+select max(quantidade), remedio.nome_remedio
+from remedio, medicacao as m inner join remedio as r 
+on m.cod_remedio = r.cod_remedio;
