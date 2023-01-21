@@ -147,4 +147,11 @@ update medicacao
 set data_vencimento = '2024-10-08' where cod_receita = 555;
 
 
--- Questão 6 
+-- Questão 6
+select nome_remedio, estoque from Remedio 
+where estoque > 5
+order by nome_remedio;
+
+
+
+-- Questão 7 ????
