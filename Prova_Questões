@@ -1,31 +1,31 @@
--- Questão 1
-create database Posto_Saude;
-use Posto_Saude;
+-- Questão 1:
+
+create database PostoSaude;
+use PostoSaude;
 
 create table PostoSaude(
-	cod_posto int primary key not null check (cod_posto > 0),
+	cod_posto int not null check (cod_posto > 0),
+    primary key(cod_posto),
     nome_posto varchar(30) not null
 );
 desc PostoSaude;
 
-
 create table Farmacia(
-	cod_farmacia int primary key not null check (cod_farmacia > 0),
+	cod_farmacia int not null check (cod_farmacia > 0),
+    primary key(cod_farmacia),
     nome_farmacia varchar(30) not null,
-    
     cod_posto int not null check (cod_posto > 0),
-    constraint fk_farmacia_posto foreign key (cod_posto) references PostoSaude(cod_posto)
+    constraint fk_farmaciaPS foreign key (cod_posto) references PostoSaude(cod_posto)
 );
 desc Farmacia;
 
-
 create table Remedio(
-	cod_remedio int primary key not null check (cod_remedio > 0),
+	cod_remedio int not null check (cod_remedio > 0),
+	primary key(cod_remedio),
     nome_remedio varchar(30) not null,
     estoque int not null
 );
 desc Remedio;
-
 
 create table FarmaciaRemedio(
 	cod_farmacia int not null check (cod_farmacia > 0),
@@ -36,64 +36,70 @@ create table FarmaciaRemedio(
 );
 desc FarmaciaRemedio;
 
-
 create table Receita(
-	cod_receita int primary key not null check (cod_receita > 0),
+	cod_receita int not null check (cod_receita > 0),
+    primary key(cod_receita),
     descricao text,
     data_prescricao date not null
 );
 desc Receita;
 
-
 create table Paciente(
-	cod_paciente int primary key not null check (cod_paciente > 0),
+	cod_paciente int not null check (cod_paciente > 0),
+    primary key(cod_paciente),
     nome_paciente varchar(40)
 );
 desc Paciente;
 
-
 create table Medicacao(
 	cod_remedio int not null check (cod_remedio > 0),
-	foreign key (cod_remedio) references Remedio(cod_remedio),
-    
+	constraint fk_medicacao_remedio foreign key (cod_remedio) references Remedio(cod_remedio),
     cod_receita int not null check (cod_receita > 0),
-    foreign key (cod_receita) references Receita(cod_receita),
-    
+    constraint fk_medicacao_receita foreign key (cod_receita) references Receita(cod_receita),
     cod_paciente int not null check (cod_paciente > 0),
     constraint fk_medicacao_paciente foreign key (cod_paciente) references Paciente(cod_paciente),
-    
     quantidade int,
-    status enum('solicitada', 'aguardando', 'atendida'),
+    status enum('Solicitada', 'Aguardando', 'Atendida'),
     data_medicacao date not null
 );
 desc Medicacao;
 
 
 
--- Questão 2
-insert into postosaude values
-(1, 'Gracinha'), (2, 'Santa Maria'), (3, 'Sorriso Maroto'), (4, 'Taboa Curva'), (5, 'Solana');
 
+-- Questão 2:
+
+insert into postosaude values
+(1, 'Gracinha'), 
+(2, 'Santa Maria'), 
+(3, 'Sorriso Maroto'), 
+(4, 'Taboa Curva'), 
+(5, 'Solana');
 select * from PostoSaude;
 
-
 insert into farmacia values
-(10, 'Pague Menos', 1), (20, 'Pague Mais', 2), (30, 'Pague o Mesmo', 3), (40, 'Pague Bem', 4), (50, 'Não Pague', 5);
-
+(10, 'Pague Menos', 1), 
+(20, 'Pague Mais', 2), 
+(30, 'Pague o Mesmo', 3), 
+(40, 'Pague Bem', 4), 
+(50, 'Não Pague', 5);
 select * from Farmacia;
 
-
 insert into remedio values
-(11, 'Lorotadina', 9), (22, 'Deslorotadina', 8), (33, 'Buscofem', 7), (44, 'Tylenol', 6), (55, 'Omeoprazol', 5);
-
+(11, 'Lorotadina', 9), 
+(22, 'Deslorotadina', 8), 
+(33, 'Buscofem', 7), 
+(44, 'Tylenol', 6), 
+(55, 'Omeoprazol', 5);
 select * from Remedio;
 
-
 insert into farmaciaremedio values
-(10, 11, 9), (20, 22, 8), (30, 33, 7), (40, 44, 6), (50, 55, 5);
-
+(10, 11, 9), 
+(20, 22, 8), 
+(30, 33, 7), 
+(40, 44, 6), 
+(50, 55, 5);
 select * from FarmaciaRemedio;
-
 
 insert into receita values
 (111, 'Prescrição Médica', '2023-01-19'), 
@@ -101,15 +107,15 @@ insert into receita values
 (333, 'Prescrição Médica','2023-01-21'), 
 (444, 'Prescrição Médica', '2023-01-22'), 
 (555, 'Prescrição Médica', '2023-01-23');
-
 select * from Receita;
 
-
 insert into paciente values
-(110, 'Ivy'), (120, 'Julian'), (130, 'Lucy'), (140, 'Phoebe'), (150, 'Lili');
-
+(110, 'Ivy'), 
+(120, 'Julian'), 
+(130, 'Lucy'), 
+(140, 'Phoebe'), 
+(150, 'Lili');
 select * from Paciente;
-
 
 insert into medicacao values 
 (11, 111, 110, 2, 'solicitada', '2023-01-20'),
@@ -117,51 +123,143 @@ insert into medicacao values
 (33, 333, 130, 3, 'solicitada', '2023-01-22'),
 (44, 444, 140, 2, 'aguardando', '2023-01-23'),
 (55, 555, 150, 4, 'solicitada', '2023-01-24');
-
 select * from Medicacao;
 
--- Questão 3 ????
-
--- Questão 4 ....
 
 
 
--- Questão 5
- -- a tabela que receberá é a 'Medicacao'
-alter table medicacao
+-- Questão 3:
+
+create table Medico(
+	cod_medico int not null check (cod_medico > 0),
+    primary key(cod_medico),
+    nome_medico varchar(30)
+);
+desc Medico;
+
+alter table Receita
+add column cod_medico int not null;
+
+alter table Receita
+add constraint fk_cod_medico_receita foreign key(cod_medico) references Medico(cod_medico);
+
+update receita 
+set cod_medico = 1000 where cod_receita = 111;
+
+update receita 
+set cod_medico = 2000 where cod_receita = 222;
+
+update receita 
+set cod_medico = 3000 where cod_receita = 333;
+
+update receita 
+set cod_medico = 4000 where cod_receita = 444;
+
+update receita 
+set cod_medico = 5000 where cod_receita = 555;
+
+select * from Receita;
+
+
+
+
+-- Questão 4:
+
+insert into medico values
+(1000, 'Paulo'), 
+(2000, 'Letícia'), 
+(3000, 'Florence'), 
+(4000, 'Jorge'), 
+(5000, 'Mia');
+
+select * from Medico;
+
+
+
+
+-- Questão 5:
+
+	# A tabela que receberá o atributo é 'Remedio'
+    
+alter table remedio
 add column data_vencimento date not null;
 
-update medicacao 
-set data_vencimento = '2023-11-09' where cod_receita = 111;
+update remedio 
+set data_vencimento = '2023-11-09' where cod_remedio = 11;
 
-update medicacao 
-set data_vencimento = '2024-01-23' where cod_receita = 222;
+update remedio 
+set data_vencimento = '2024-01-23' where cod_remedio = 22;
 
-update medicacao 
-set data_vencimento = '2024-03-03' where cod_receita = 333;
+update remedio 
+set data_vencimento = '2024-03-03' where cod_remedio = 33;
 
-update medicacao 
-set data_vencimento = '2023-12-31' where cod_receita = 444;
+update remedio 
+set data_vencimento = '2023-12-31' where cod_remedio = 44;
 
-update medicacao 
-set data_vencimento = '2024-10-08' where cod_receita = 555;
+update remedio 
+set data_vencimento = '2024-10-08' where cod_remedio = 55;
+
+select * from remedio;
 
 
--- Questão 6
+
+
+-- Questão 6:
+
 select nome_remedio, estoque from Remedio 
 where estoque > 5
 order by nome_remedio;
 
 
 
--- Questão 7
 
-#select max(quantidade) from medicacao;
+-- Questão 7:
 
-/*select remedio.nome_remedio, Medicacao.quantidade 
-from Remedio 
-inner join Medicacao on remedio.cod_remedio = Medicacao.cod_remedio; */
+select remedio.nome_remedio as "Medicamento", Medicacao.quantidade as "Mais sai - Menos sai" 
+from Remedio
+inner join Medicacao on remedio.cod_remedio = Medicacao.cod_remedio
+order by quantidade desc;
 
-select max(quantidade), remedio.nome_remedio
-from remedio, medicacao as m inner join remedio as r 
-on m.cod_remedio = r.cod_remedio;
+
+
+
+-- Questão 8:
+
+select remedio.nome_remedio as "Em falta na farmácia", remedio.cod_remedio as "Código" from remedio
+where remedio.cod_remedio not in(
+	select remedio.cod_remedio from remedio
+    inner join farmaciaremedio on remedio.cod_remedio = farmaciaremedio.cod_remedio
+    inner join farmacia on farmaciaremedio.cod_farmacia = farmacia.cod_farmacia and farmacia.cod_posto = 5
+);
+
+
+
+
+-- Questão 9:
+
+select r.nome_remedio as "Medicamento", r.cod_remedio, sum(m.quantidade) as "Q.Saída", f.nome_farmacia as "Farmácia" from Remedio r, Medicacao m
+inner join FarmaciaRemedio fr on fr.cod_remedio = m.cod_remedio
+inner join Farmacia f on f.cod_farmacia = fr.cod_farmacia and f.cod_posto = 5
+where r.cod_remedio = m.cod_remedio
+group by r.cod_remedio;
+
+
+
+
+-- Questão 10:
+
+select r.nome_remedio as "Medicamento", m.status from Remedio r, medicacao m
+inner join FarmaciaRemedio fr on fr.cod_remedio = m.cod_remedio
+inner join Farmacia f
+where r.cod_remedio = m.cod_remedio and m.status = "Aguardando" and f.cod_posto in (1, 2, 3, 4, 5)
+group by r.cod_remedio;
+
+
+
+
+-- Questão 11:
+
+select remedio.nome_remedio as "Medicamento", sum(medicacao.quantidade) as "Menos sai - Mais sai" from remedio, medicacao
+where remedio.cod_remedio = medicacao.cod_remedio
+group by remedio.cod_remedio
+order by quantidade;
